@@ -15,6 +15,11 @@ def play_game():
 
     game_objects = []
 
+    background_image = pygame.image.load(os.path.join("resources", "background.png"))
+    background_image = pygame.transform.scale(background_image, (800, 600))
+    ball_img = pygame.image.load(os.path.join("resources", "Cannonball.png"))
+    cannon_img = pygame.image.load(os.path.join("resources", "Cannon.png"))
+
     while True:
 
         #####################
@@ -46,6 +51,10 @@ def play_game():
         #####################
         ### Render Screen ###
         #####################
+        window.blit(background_image, (0, 0))
+        window.blit(ball_img, (400, 300))
+        window.blit(cannon_img, (200, 300))
+        pygame.display.update()
 
 
 if __name__ == "__main__":
