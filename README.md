@@ -15,6 +15,6 @@ As always, we're available throughout the week to answer questions. That said we
 # Wow, this is awesome! Who do I thank for this??
 Tyler Wise - For having a cute doggo
 
-Jackson Smith - For... something I'm sure
+Jackson Smith - For the world's most awesome soundtrack
 
 Brian Schmidt - For being better at pixel art than the idiots listed above and making the assets for this lesson
