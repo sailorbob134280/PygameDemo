@@ -1,3 +1,5 @@
+from angle_meter import AngleMeter
+from power_meter import PowerMeter
 from base import Base
 from background import Background
 from ball import Ball
@@ -11,11 +13,13 @@ def play_game():
     pygame.init()
 
     constants = {
-        "screen_width": 800,
-        "screen_height": 600,
+        "screen_width": 1200,
+        "screen_height": 900,
         "gravity": 98,
-        "ground": 420,
+        "ground": 700,
         "fps": 60,
+        "font": "Ariel",
+        "font_size": 80,
     }
 
     window = pygame.display.set_mode(
@@ -26,17 +30,32 @@ def play_game():
     game_objects = []
 
     background_image = pygame.image.load(os.path.join("resources", "background.png"))
-    background_image = pygame.transform.scale(background_image, (800, 600))
+    background_image = pygame.transform.scale(
+        background_image, (constants["screen_width"], constants["screen_height"])
+    )
     ball_img = pygame.image.load(os.path.join("resources", "Cannonball.png"))
     cannon_img = pygame.image.load(os.path.join("resources", "Cannon.png"))
     base_img = pygame.image.load(os.path.join("resources", "Wheel.png"))
 
-    cannon = Cannon(cannon_img, 100, 420)
-    base = Base(base_img, 100, 420)
+    cannon = Cannon(cannon_img, 100, constants["ground"])
+    base = Base(base_img, 100, constants["ground"])
     background = Background(background_image, 0, 0)
+    power_meter = PowerMeter(
+        80,
+        constants["ground"] + 130,
+        constants["font"],
+        constants["font_size"],
+        cannon,
+    )
+    angle_meter = AngleMeter(
+        80, constants["ground"] + 70, constants["font"], constants["font_size"], cannon
+    )
 
     game_objects.append(cannon)
     game_objects.append(base)
+    game_objects.append(power_meter)
+    game_objects.append(angle_meter)
+
     curr_time = time.time()
     frame_time = 1 / constants["fps"]
 
@@ -68,6 +87,7 @@ def play_game():
                         cannon.angle,
                         cannon.power,
                         constants["gravity"],
+                        constants["ground"],
                     )
                     game_objects.append(ball)
                     cannon_sound.play()
@@ -97,6 +117,7 @@ def play_game():
         # window.blit(background_image, (0, 0))
         # window.blit(ball_img, (400, 300))
         # window.blit(cannon_img, (200, 300))
+        # Ensure the background is always at the back
         background.render(window)
         for obj in game_objects:
             obj.render(window)

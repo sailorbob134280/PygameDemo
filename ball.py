@@ -1,15 +1,15 @@
-import pygame
 import math
 
 
 class Ball:
-    def __init__(self, image, x, y, angle, vel, gravity) -> None:
+    def __init__(self, image, x, y, angle, vel, gravity, ground) -> None:
         self.image = image
         self.x = x
         self.y = y
         self.vel_x = math.cos(math.radians(angle)) * vel
         self.vel_y = -math.sin(math.radians(angle)) * vel
         self.gravity = gravity
+        self.ground = ground
         self.rect = image.get_rect(center=(x, y))
         self.on_ground = False
 
@@ -21,7 +21,7 @@ class Ball:
 
             self.rect = self.image.get_rect(center=(self.x, self.y))
 
-            if self.y > 460:
+            if self.y > self.ground + 20:
                 self.on_ground = True
 
     def render(self, window):

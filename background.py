@@ -1,6 +1,3 @@
-import pygame
-
-
 class Background:
     def __init__(self, image, x, y) -> None:
         self.image = image

@@ -15,6 +15,10 @@ class Cannon:
 
     def change_power(self, dp):
         self.power += dp
+        if self.power < 0:
+            self.power = 0
+        if self.power > 1000:
+            self.power = 1000
 
     def update(self, time_step):
         pass
