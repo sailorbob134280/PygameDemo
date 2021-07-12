@@ -9,9 +9,17 @@ import time
 import os
 
 
-def play_game():
+def play_game() -> bool:
+    """The main game function. This isn't a bad idea to get into the habit of. It can
+    be useful to separate different levels this way, and it will make it easier to
+    integrate into the arcade.
+
+    Returns:
+        bool: True if complete
+    """
     pygame.init()
 
+    # Define some useful constants in one place
     constants = {
         "screen_width": 1200,
         "screen_height": 900,
@@ -22,13 +30,16 @@ def play_game():
         "font_size": 80,
     }
 
+    # Set up our window
     window = pygame.display.set_mode(
         (constants["screen_width"], constants["screen_height"])
     )
     pygame.display.set_caption("SuperAwesomeTutorial")
 
+    # Empty list to eventually store game objects
     game_objects = []
 
+    # Bring in our images
     background_image = pygame.image.load(os.path.join("resources", "background.png"))
     background_image = pygame.transform.scale(
         background_image, (constants["screen_width"], constants["screen_height"])
@@ -37,6 +48,7 @@ def play_game():
     cannon_img = pygame.image.load(os.path.join("resources", "Cannon.png"))
     base_img = pygame.image.load(os.path.join("resources", "Wheel.png"))
 
+    # Set up our objects
     cannon = Cannon(cannon_img, 100, constants["ground"])
     base = Base(base_img, 100, constants["ground"])
     background = Background(background_image, 0, 0)
@@ -51,21 +63,27 @@ def play_game():
         80, constants["ground"] + 70, constants["font"], constants["font_size"], cannon
     )
 
+    # Add our objects to our game object list so they get updated and rendered
     game_objects.append(cannon)
     game_objects.append(base)
     game_objects.append(power_meter)
     game_objects.append(angle_meter)
 
+    # Set up our FPS cap and timekeeping variables
     curr_time = time.time()
     frame_time = 1 / constants["fps"]
 
+    # Load our awesome soundtrack
     pygame.mixer.music.load(os.path.join("resources", "AwesomeSoundtrack.wav"))
     pygame.mixer.music.set_volume(0.4)
     pygame.mixer.music.play(loops=-1)
 
+    # Load our cannon soundfx
     cannon_sound = pygame.mixer.Sound(os.path.join("resources", "CannonFire.wav"))
 
+    # The main loop! Lets goooooooooooooo
     while True:
+        # Lock the framerate so we don't get any wonky behavior
         last_time = curr_time
         curr_time = time.time()
         dt = curr_time - last_time
@@ -80,6 +98,8 @@ def play_game():
                 return True
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
+                    # Fire the ball by making the ball, giving it a velocity, and
+                    # adding it to our objects list. Finally, play the sound
                     ball = Ball(
                         ball_img,
                         cannon.rect.right,
@@ -108,19 +128,21 @@ def play_game():
         ######################
         ### Handle Updates ###
         ######################
+        # Update everything. Currently, every ball we fire needs this
         for obj in game_objects:
             obj.update(dt)
 
         #####################
         ### Render Screen ###
         #####################
-        # window.blit(background_image, (0, 0))
-        # window.blit(ball_img, (400, 300))
-        # window.blit(cannon_img, (200, 300))
         # Ensure the background is always at the back
         background.render(window)
+
+        # Render everythin in front of the background
         for obj in game_objects:
             obj.render(window)
+
+        # Update the display with all the images we just rendered
         pygame.display.flip()
 
 
